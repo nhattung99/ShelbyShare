@@ -112,7 +112,7 @@ export default function FilePage() {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1 max-w-2xl w-full mx-auto px-4 py-12">
-        <div className="rounded-xl bg-surface-elevated border border-border p-6">
+        <div className="rounded-2xl bg-surface-elevated border border-border p-6 shadow-sm">
           <h1 className="text-xl font-semibold text-zinc-100 truncate mb-1">
             {fileInfo.name}
           </h1>
@@ -161,7 +161,7 @@ export default function FilePage() {
         </div>
 
         {previewUrl && (
-          <div className="mt-8 rounded-xl border border-border bg-surface-elevated overflow-hidden">
+          <div className="mt-8 rounded-2xl border border-border bg-surface-elevated overflow-hidden shadow-sm">
             <div className="p-2 border-b border-border flex justify-end">
               <button
                 type="button"

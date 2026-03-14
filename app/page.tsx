@@ -26,12 +26,12 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-12">
-        <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold text-zinc-100 mb-2">
+      <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-12">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl sm:text-5xl font-bold text-zinc-100 mb-3 tracking-tight">
             Decentralized file sharing
           </h1>
-          <p className="text-zinc-500">
+          <p className="text-zinc-500 text-lg max-w-xl mx-auto">
             Upload to Shelby Protocol. Share a link. Anyone can download.
           </p>
         </div>
@@ -39,8 +39,8 @@ export default function HomePage() {
         <UploadBox onUploadComplete={onUploadComplete} />
 
         {recentShareId && recentName && (
-          <div className="mt-8 p-4 rounded-xl bg-accent-dim border border-accent/30">
-            <p className="text-sm text-zinc-400 mb-2">Just uploaded</p>
+          <div className="mt-10 p-5 rounded-2xl bg-accent-dim/80 border border-accent/30 shadow-lg shadow-accent/5">
+            <p className="text-sm font-medium text-accent/90 mb-3">Just uploaded</p>
             <FileCard
               name={recentName}
               shareId={recentShareId}
@@ -50,7 +50,7 @@ export default function HomePage() {
         )}
 
         {account && (
-          <section className="mt-12">
+          <section className="mt-14">
             <h2 className="text-lg font-semibold text-zinc-200 mb-4">
               Your files
             </h2>

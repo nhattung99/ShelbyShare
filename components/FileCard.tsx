@@ -27,7 +27,7 @@ export function FileCard({
   const url = typeof window !== "undefined" ? `${window.location.origin}/file/${shareId}` : `/file/${shareId}`;
 
   return (
-    <div className="rounded-xl bg-surface-elevated border border-border p-4 hover:border-accent/30 transition-colors">
+    <div className="rounded-2xl bg-surface-elevated border border-border p-4 hover:border-accent/30 transition-colors shadow-sm">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <Link

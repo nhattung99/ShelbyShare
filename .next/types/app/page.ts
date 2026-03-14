@@ -1,4 +1,4 @@
-// File: C:\Users\NHAT TUNG\OneDrive\Máy tính\ShelbyShare\app\page.tsx
+// File: C:\DEV Panda\ShelbyShare\app\page.tsx
 import * as entry from '../../../app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

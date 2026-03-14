@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --background: #0d0d0f;
+  --background: #0a0a0b;
   --foreground: #e4e4e7;
 }
 
@@ -15,4 +15,10 @@ body {
 /* Ensure wallet modals and dropdowns render above app content */
 .wallet-adapter-modal-wrapper {
   z-index: 100;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
 }
