@@ -9,6 +9,10 @@ interface FileCardProps {
   size?: number;
   createdAt?: string;
   showShareLink?: boolean;
+  /** AI-generated description (e.g. from upload) */
+  description?: string;
+  /** AI-generated tags, comma-separated */
+  tags?: string;
 }
 
 function formatSize(bytes: number): string {
@@ -23,6 +27,8 @@ export function FileCard({
   size,
   createdAt,
   showShareLink = true,
+  description,
+  tags,
 }: FileCardProps) {
   const url = typeof window !== "undefined" ? `${window.location.origin}/file/${shareId}` : `/file/${shareId}`;
 
@@ -43,6 +49,12 @@ export function FileCard({
                 <span>{new Date(createdAt).toLocaleDateString()}</span>
               )}
             </div>
+          )}
+          {description && (
+            <p className="mt-2 text-sm text-pink-200/90 line-clamp-2">{description}</p>
+          )}
+          {tags && (
+            <p className="mt-1 text-xs text-pink-400/70">Tags: {tags}</p>
           )}
         </div>
       </div>

@@ -10,17 +10,34 @@ import {
   encodeShareId,
 } from "@/lib/shelby";
 
+export type AiDescribeResult = { description: string; tags: string };
+
 type Status = "idle" | "encoding" | "registering" | "uploading" | "done" | "error";
+
+async function describeFileWithAi(file: File): Promise<AiDescribeResult | null> {
+  const form = new FormData();
+  form.append("file", file);
+  const res = await fetch("/api/ai/describe", { method: "POST", body: form });
+  if (!res.ok) return null;
+  const data = await res.json();
+  return { description: data.description ?? "", tags: data.tags ?? "" };
+}
 
 export function UploadBox({
   onUploadComplete,
 }: {
-  onUploadComplete?: (shareId: string, name: string) => void;
+  onUploadComplete?: (shareId: string, name: string, ai?: AiDescribeResult) => void;
 }) {
   const { account, signAndSubmitTransaction } = useWallet();
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
   const [drag, setDrag] = useState(false);
+  const [useAi, setUseAi] = useState(true);
+  const [aiResult, setAiResult] = useState<AiDescribeResult | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [fromUrl, setFromUrl] = useState("");
+  const [urlLoading, setUrlLoading] = useState(false);
+  const [urlError, setUrlError] = useState<string | null>(null);
 
   const upload = useCallback(
     async (file: File) => {
@@ -30,7 +47,16 @@ export function UploadBox({
         return;
       }
       setError(null);
+      setAiResult(null);
       setStatus("encoding");
+
+      // Start AI describe in parallel (don't block upload)
+      let aiPromise: Promise<AiDescribeResult | null> = Promise.resolve(null);
+      if (useAi) {
+        setAiLoading(true);
+        aiPromise = describeFileWithAi(file).finally(() => setAiLoading(false));
+      }
+
       try {
         const commitments = await encodeFile(file);
         setStatus("registering");
@@ -57,14 +83,17 @@ export function UploadBox({
         });
         setStatus("done");
         const shareId = encodeShareId(account.address.toString(), file.name);
-        onUploadComplete?.(shareId, file.name);
+        // Wait for AI if still in progress, then callback with result
+        const ai = await aiPromise;
+        setAiResult(ai ?? null);
+        onUploadComplete?.(shareId, file.name, ai ?? undefined);
       } catch (e) {
         const message = e instanceof Error ? e.message : "Upload failed";
         setError(message);
         setStatus("error");
       }
     },
-    [account?.address, signAndSubmitTransaction, onUploadComplete]
+    [account?.address, signAndSubmitTransaction, onUploadComplete, useAi]
   );
 
   const onDrop = useCallback(
@@ -91,6 +120,33 @@ export function UploadBox({
     [upload]
   );
 
+  const uploadFromUrl = useCallback(async () => {
+    const url = fromUrl.trim();
+    if (!url || busy) return;
+    setUrlError(null);
+    setUrlLoading(true);
+    try {
+      const res = await fetch("/api/fetch-from-url", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || `Error ${res.status}`);
+      }
+      const blob = await res.blob();
+      const name = decodeURIComponent(res.headers.get("X-Filename") || "download");
+      const file = new File([blob], name, { type: blob.type || "application/octet-stream" });
+      setFromUrl("");
+      await upload(file);
+    } catch (e) {
+      setUrlError(e instanceof Error ? e.message : "Failed to fetch from URL");
+    } finally {
+      setUrlLoading(false);
+    }
+  }, [fromUrl, busy, upload]);
+
   const busy = status === "encoding" || status === "registering" || status === "uploading";
 
   return (
@@ -100,46 +156,104 @@ export function UploadBox({
           Connect your wallet to upload files.
         </div>
       ) : (
-        <div
-          onDrop={onDrop}
-          onDragOver={onDragOver}
-          onDragLeave={onDragLeave}
-          className={`rounded-2xl border-2 border-dashed p-10 text-center transition-all duration-200 ${
-            drag
-              ? "border-accent bg-accent-dim scale-[1.01]"
-              : "border-border bg-surface-muted/50 hover:border-pink-500/50"
-          } ${busy ? "pointer-events-none opacity-80" : ""}`}
-        >
-          <input
-            type="file"
-            id="file-upload"
-            className="hidden"
-            onChange={onInputChange}
-            disabled={busy}
-          />
-          <label htmlFor="file-upload" className="cursor-pointer block">
-            {status === "encoding" && (
-              <p className="text-accent">Encoding file…</p>
+        <>
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <input
+              type="checkbox"
+              id="use-ai"
+              checked={useAi}
+              onChange={(e) => setUseAi(e.target.checked)}
+              disabled={busy}
+              className="rounded border-border bg-surface text-accent focus:ring-accent"
+            />
+            <label htmlFor="use-ai" className="text-sm text-pink-300/90 cursor-pointer">
+              Use AI to describe file
+            </label>
+          </div>
+          <div
+            onDrop={onDrop}
+            onDragOver={onDragOver}
+            onDragLeave={onDragLeave}
+            className={`rounded-2xl border-2 border-dashed p-10 text-center transition-all duration-200 ${
+              drag
+                ? "border-accent bg-accent-dim scale-[1.01]"
+                : "border-border bg-surface-muted/50 hover:border-pink-500/50"
+            } ${busy ? "pointer-events-none opacity-80" : ""}`}
+          >
+            <input
+              type="file"
+              id="file-upload"
+              className="hidden"
+              onChange={onInputChange}
+              disabled={busy}
+            />
+            <label htmlFor="file-upload" className="cursor-pointer block">
+              {status === "encoding" && (
+                <p className="text-accent">
+                  Encoding file… {useAi && "(AI analyzing in background)"}
+                </p>
+              )}
+              {status === "registering" && (
+                <p className="text-accent">Confirm in wallet…</p>
+              )}
+              {status === "uploading" && (
+                <p className="text-accent">Uploading to Shelby…</p>
+              )}
+              {status === "done" && (
+                <div>
+                  <p className="text-accent">Upload complete.</p>
+                  {aiLoading && (
+                    <p className="text-sm text-pink-400/80 mt-1">AI describing…</p>
+                  )}
+                  {aiResult && !aiLoading && (
+                    <div className="mt-3 text-left max-w-md mx-auto rounded-lg bg-surface-elevated/80 border border-border p-3">
+                      <p className="text-sm text-pink-200">{aiResult.description}</p>
+                      {aiResult.tags && (
+                        <p className="text-xs text-pink-400/80 mt-1">
+                          Tags: {aiResult.tags}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+              {status === "error" && error && (
+                <p className="text-red-400">{error}</p>
+              )}
+              {(status === "idle" || status === "done") && (
+                <p className="text-pink-300/90">
+                  Drop a file here or <span className="text-accent underline">browse</span>
+                </p>
+              )}
+            </label>
+          </div>
+
+          <div className="mt-4 rounded-xl border border-border bg-surface-muted/30 p-4">
+            <p className="text-sm text-pink-400/90 mb-2">Upload trực tiếp từ nguồn (URL)</p>
+            <div className="flex gap-2 flex-wrap">
+              <input
+                type="url"
+                value={fromUrl}
+                onChange={(e) => { setFromUrl(e.target.value); setUrlError(null); }}
+                onKeyDown={(e) => e.key === "Enter" && uploadFromUrl()}
+                placeholder="https://example.com/file.pdf"
+                disabled={busy || urlLoading}
+                className="flex-1 min-w-[200px] px-3 py-2 rounded-lg bg-surface border border-border text-pink-100 placeholder-pink-500/50 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent disabled:opacity-60"
+              />
+              <button
+                type="button"
+                onClick={uploadFromUrl}
+                disabled={busy || urlLoading || !fromUrl.trim()}
+                className="px-4 py-2 rounded-lg bg-accent text-surface font-medium hover:bg-accent-muted disabled:opacity-50 transition-colors"
+              >
+                {urlLoading ? "Đang tải…" : "Tải & upload"}
+              </button>
+            </div>
+            {urlError && (
+              <p className="text-sm text-red-400 mt-2">{urlError}</p>
             )}
-            {status === "registering" && (
-              <p className="text-accent">Confirm in wallet…</p>
-            )}
-            {status === "uploading" && (
-              <p className="text-accent">Uploading to Shelby…</p>
-            )}
-            {status === "done" && (
-              <p className="text-accent">Upload complete.</p>
-            )}
-            {status === "error" && error && (
-              <p className="text-red-400">{error}</p>
-            )}
-            {(status === "idle" || status === "done") && (
-              <p className="text-pink-300/90">
-                Drop a file here or <span className="text-accent underline">browse</span>
-              </p>
-            )}
-          </label>
-        </div>
+          </div>
+        </>
       )}
     </div>
   );

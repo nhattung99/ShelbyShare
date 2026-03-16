@@ -12,16 +12,21 @@ export default function HomePage() {
   const { account } = useWallet();
   const [recentShareId, setRecentShareId] = useState<string | null>(null);
   const [recentName, setRecentName] = useState<string | null>(null);
+  const [recentAi, setRecentAi] = useState<{ description: string; tags: string } | null>(null);
 
   const { data: blobs, isLoading, error } = useAccountBlobs({
     account: account?.address?.toString() ?? "",
     pagination: { limit: 20, offset: 0 },
   });
 
-  const onUploadComplete = useCallback((shareId: string, name: string) => {
-    setRecentShareId(shareId);
-    setRecentName(name);
-  }, []);
+  const onUploadComplete = useCallback(
+    (shareId: string, name: string, ai?: { description: string; tags: string }) => {
+      setRecentShareId(shareId);
+      setRecentName(name);
+      setRecentAi(ai ?? null);
+    },
+    []
+  );
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -45,6 +50,8 @@ export default function HomePage() {
               name={recentName}
               shareId={recentShareId}
               showShareLink
+              description={recentAi?.description}
+              tags={recentAi?.tags}
             />
           </div>
         )}
