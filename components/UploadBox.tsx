@@ -96,7 +96,7 @@ export function UploadBox({
   return (
     <div className="w-full max-w-xl mx-auto">
       {!account ? (
-        <div className="rounded-2xl border border-border border-dashed bg-surface-muted/50 p-10 text-center text-zinc-500">
+        <div className="rounded-2xl border border-border border-dashed bg-surface-muted/50 p-10 text-center text-pink-400/80">
           Connect your wallet to upload files.
         </div>
       ) : (
@@ -107,7 +107,7 @@ export function UploadBox({
           className={`rounded-2xl border-2 border-dashed p-10 text-center transition-all duration-200 ${
             drag
               ? "border-accent bg-accent-dim scale-[1.01]"
-              : "border-border bg-surface-muted/50 hover:border-zinc-500"
+              : "border-border bg-surface-muted/50 hover:border-pink-500/50"
           } ${busy ? "pointer-events-none opacity-80" : ""}`}
         >
           <input
@@ -134,7 +134,7 @@ export function UploadBox({
               <p className="text-red-400">{error}</p>
             )}
             {(status === "idle" || status === "done") && (
-              <p className="text-zinc-400">
+              <p className="text-pink-300/90">
                 Drop a file here or <span className="text-accent underline">browse</span>
               </p>
             )}

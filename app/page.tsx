@@ -28,10 +28,10 @@ export default function HomePage() {
       <Header />
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl sm:text-5xl font-bold text-zinc-100 mb-3 tracking-tight">
+          <h1 className="text-4xl sm:text-5xl font-bold text-pink-50 mb-3 tracking-tight">
             Decentralized file sharing
           </h1>
-          <p className="text-zinc-500 text-lg max-w-xl mx-auto">
+          <p className="text-pink-300/80 text-lg max-w-xl mx-auto">
             Upload to Shelby Protocol. Share a link. Anyone can download.
           </p>
         </div>
@@ -40,7 +40,7 @@ export default function HomePage() {
 
         {recentShareId && recentName && (
           <div className="mt-10 p-5 rounded-2xl bg-accent-dim/80 border border-accent/30 shadow-lg shadow-accent/5">
-            <p className="text-sm font-medium text-accent/90 mb-3">Just uploaded</p>
+            <p className="text-sm font-medium text-pink-400 mb-3">Just uploaded</p>
             <FileCard
               name={recentName}
               shareId={recentShareId}
@@ -51,21 +51,28 @@ export default function HomePage() {
 
         {account && (
           <section className="mt-14">
-            <h2 className="text-lg font-semibold text-zinc-200 mb-4">
+            <h2 className="text-lg font-semibold text-pink-100 mb-4">
               Your files
             </h2>
             {isLoading && (
-              <div className="text-zinc-500 py-8 text-center">
+              <div className="text-pink-400/80 py-8 text-center">
                 Loading your files…
               </div>
             )}
             {error && (
-              <div className="text-red-400 py-4 text-center">
-                Failed to load files: {error.message}
+              <div className="rounded-xl border border-pink-500/30 bg-pink-500/10 p-4 text-pink-200 text-center">
+                <p className="font-medium">Failed to load files</p>
+                <p className="text-sm mt-1 text-pink-300/90">{error.message}</p>
+                {/Unauthorized|API key not found/i.test(error.message) && (
+                  <p className="text-sm mt-3 text-pink-400/80">
+                    Trạng thái key: {process.env.NEXT_PUBLIC_SHELBY_API_KEY ? "✅ Đã có trong app" : "❌ App chưa nhận (cần restart dev server)"}.{" "}
+                    Vào <a href="https://geomi.dev" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">geomi.dev</a> → API Resource → client key → <strong>Approved URLs</strong> phải có đúng URL bạn đang mở (ví dụ <code className="bg-surface-elevated px-1 rounded text-pink-200">{typeof window !== "undefined" ? window.location.origin : "http://localhost:3001"}</code>). Thêm cả <code className="bg-surface-elevated px-1 rounded text-pink-200">http://localhost:3000</code> và <code className="bg-surface-elevated px-1 rounded text-pink-200">http://localhost:3001</code> rồi lưu.
+                  </p>
+                )}
               </div>
             )}
             {blobs && blobs.length === 0 && !isLoading && (
-              <div className="text-zinc-500 py-8 text-center rounded-xl border border-border bg-surface-elevated">
+              <div className="text-pink-400/80 py-8 text-center rounded-xl border border-border bg-surface-elevated">
                 No files yet. Upload one above.
               </div>
             )}

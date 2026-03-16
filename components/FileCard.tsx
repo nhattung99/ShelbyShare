@@ -32,12 +32,12 @@ export function FileCard({
         <div className="min-w-0 flex-1">
           <Link
             href={`/file/${shareId}`}
-            className="font-medium text-zinc-100 hover:text-accent truncate block"
+            className="font-medium text-pink-50 hover:text-accent truncate block"
           >
             {name}
           </Link>
           {(size != null || createdAt) && (
-            <div className="mt-1 flex items-center gap-3 text-xs text-zinc-500">
+            <div className="mt-1 flex items-center gap-3 text-xs text-pink-400/80">
               {size != null && <span>{formatSize(size)}</span>}
               {createdAt && (
                 <span>{new Date(createdAt).toLocaleDateString()}</span>

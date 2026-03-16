@@ -21,13 +21,13 @@ export function WalletConnect() {
   if (connected && account) {
     return (
       <div className="flex items-center gap-2">
-        <span className="text-sm text-zinc-400 font-mono truncate max-w-[140px]">
+        <span className="text-sm text-pink-300/90 font-mono truncate max-w-[140px]">
           {account.address.toString().slice(0, 6)}…{account.address.toString().slice(-4)}
         </span>
         <button
           type="button"
           onClick={() => disconnect()}
-          className="px-3 py-1.5 rounded-lg bg-surface-muted border border-border text-zinc-300 hover:bg-surface-elevated hover:border-accent/50 text-sm transition-colors"
+          className="px-3 py-1.5 rounded-lg bg-surface-muted border border-border text-pink-200 hover:bg-surface-elevated hover:border-accent/50 text-sm transition-colors"
         >
           Disconnect
         </button>
@@ -53,7 +53,7 @@ export function WalletConnect() {
           />
           <div className="absolute right-0 top-full mt-2 z-20 w-56 rounded-xl bg-surface-elevated border border-border shadow-xl py-2">
             {wallets.length === 0 ? (
-              <p className="px-4 py-2 text-sm text-zinc-500">
+              <p className="px-4 py-2 text-sm text-pink-400/80">
                 No wallets found. Install Petra or another Aptos wallet.
               </p>
             ) : (
@@ -62,7 +62,7 @@ export function WalletConnect() {
                   key={wallet.name}
                   type="button"
                   onClick={() => handleConnect(wallet.name)}
-                  className="w-full px-4 py-2.5 text-left text-sm text-zinc-200 hover:bg-surface-muted transition-colors flex items-center gap-2"
+                  className="w-full px-4 py-2.5 text-left text-sm text-pink-100 hover:bg-surface-muted transition-colors flex items-center gap-2"
                 >
                   {wallet.name}
                 </button>

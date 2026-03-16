@@ -16,7 +16,7 @@ const shelbyNetwork = Network.TESTNET;
 function makeShelbyClient() {
   return new ShelbyClient({
     network: shelbyNetwork,
-    apiKey: shelbyApiKey || "placeholder",
+    apiKey: shelbyApiKey,
   });
 }
 

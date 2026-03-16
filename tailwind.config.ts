@@ -10,18 +10,18 @@ const config: Config = {
     extend: {
       colors: {
         surface: {
-          DEFAULT: "#0d0d0f",
-          elevated: "#161618",
-          muted: "#1c1c1f",
+          DEFAULT: "#0f0a0d",
+          elevated: "#1a1216",
+          muted: "#1f151a",
         },
         accent: {
-          DEFAULT: "#00d4aa",
-          muted: "#00a884",
-          dim: "rgba(0, 212, 170, 0.12)",
+          DEFAULT: "#ec4899",
+          muted: "#db2777",
+          dim: "rgba(236, 72, 153, 0.14)",
         },
         border: {
-          DEFAULT: "#2a2a2e",
-          focus: "#00d4aa",
+          DEFAULT: "#2e2428",
+          focus: "#ec4899",
         },
       },
       fontFamily: {

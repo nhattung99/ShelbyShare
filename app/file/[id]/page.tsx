@@ -83,8 +83,8 @@ export default function FilePage() {
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-1 max-w-2xl mx-auto px-4 py-12 text-center">
-          <h1 className="text-xl font-semibold text-zinc-100 mb-2">Invalid link</h1>
-          <p className="text-zinc-500 mb-4">This share link is invalid or expired.</p>
+          <h1 className="text-xl font-semibold text-pink-50 mb-2">Invalid link</h1>
+          <p className="text-pink-300/80 mb-4">This share link is invalid or expired.</p>
           <button
             type="button"
             onClick={() => router.push("/")}
@@ -113,20 +113,20 @@ export default function FilePage() {
       <Header />
       <main className="flex-1 max-w-2xl w-full mx-auto px-4 py-12">
         <div className="rounded-2xl bg-surface-elevated border border-border p-6 shadow-sm">
-          <h1 className="text-xl font-semibold text-zinc-100 truncate mb-1">
+          <h1 className="text-xl font-semibold text-pink-50 truncate mb-1">
             {fileInfo.name}
           </h1>
           {(sizeStr || (metadata && "created_at" in metadata)) && (
-            <p className="text-sm text-zinc-500 mb-4">
+            <p className="text-sm text-pink-300/80 mb-4">
               {sizeStr}
               {metadata && "created_at" in metadata && ` · ${new Date((metadata as { created_at: string }).created_at).toLocaleString()}`}
             </p>
           )}
           {isLoading && !metadata && (
-            <p className="text-sm text-zinc-500 mb-4">Loading file info…</p>
+            <p className="text-sm text-pink-300/80 mb-4">Loading file info…</p>
           )}
           {error && (
-            <p className="text-sm text-amber-500 mb-4">Could not load metadata. You can still try to download.</p>
+            <p className="text-sm text-pink-400 mb-4">Could not load metadata. You can still try to download.</p>
           )}
 
           <div className="flex flex-wrap gap-3 mb-4">
@@ -143,7 +143,7 @@ export default function FilePage() {
                 type="button"
                 onClick={handlePreview}
                 disabled={downloading}
-                className="px-4 py-2 rounded-lg bg-surface-muted border border-border text-zinc-200 hover:bg-surface hover:border-accent/50 transition-colors disabled:opacity-60"
+                className="px-4 py-2 rounded-lg bg-surface-muted border border-border text-pink-200 hover:bg-surface hover:border-accent/50 transition-colors disabled:opacity-60"
               >
                 Preview
               </button>
@@ -155,7 +155,7 @@ export default function FilePage() {
           )}
 
           <div className="pt-4 border-t border-border">
-            <p className="text-sm text-zinc-500 mb-2">Share link</p>
+            <p className="text-sm text-pink-400/80 mb-2">Share link</p>
             <ShareLink url={shareUrl} />
           </div>
         </div>
@@ -166,7 +166,7 @@ export default function FilePage() {
               <button
                 type="button"
                 onClick={() => { URL.revokeObjectURL(previewUrl); setPreviewUrl(null); }}
-                className="text-sm text-zinc-400 hover:text-zinc-200"
+                className="text-sm text-pink-400 hover:text-pink-100"
               >
                 Close preview
               </button>

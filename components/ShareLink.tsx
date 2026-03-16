@@ -27,7 +27,7 @@ export function ShareLink({ url, onCopy, className = "" }: ShareLinkProps) {
         type="text"
         readOnly
         value={url}
-        className="flex-1 min-w-0 px-3 py-2.5 bg-transparent text-sm text-zinc-300 font-mono truncate outline-none"
+        className="flex-1 min-w-0 px-3 py-2.5 bg-transparent text-sm text-pink-200 font-mono truncate outline-none"
       />
       <button
         type="button"

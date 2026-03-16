@@ -3,13 +3,27 @@
 @tailwind utilities;
 
 :root {
-  --background: #0a0a0b;
-  --foreground: #e4e4e7;
+  --background: #0f0a0d;
+  --foreground: #fce7f3;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
+  background-image: url("/background.png");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15, 10, 13, 0.85) 0%, rgba(15, 10, 13, 0.92) 50%, rgba(15, 10, 13, 0.95) 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Ensure wallet modals and dropdowns render above app content */
