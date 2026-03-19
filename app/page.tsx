@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import Link from "next/link";
 import { Header } from "@/components/Header";
 import { UploadBox } from "@/components/UploadBox";
 import { FileCard } from "@/components/FileCard";
@@ -32,14 +33,65 @@ export default function HomePage() {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-12">
-        <div className="text-center mb-12">
+        <div className="text-center mb-10">
           <h1 className="text-4xl sm:text-5xl font-bold text-pink-50 mb-3 tracking-tight">
             Decentralized file sharing
           </h1>
           <p className="text-pink-300/80 text-lg max-w-xl mx-auto">
             Upload to Shelby Protocol. Share a link. Anyone can download.
           </p>
+          <p className="mt-2 text-sm text-pink-400/80">
+            Or <Link href="/marketplace" className="text-accent hover:underline">browse & sell datasets</Link> on the Marketplace.
+          </p>
         </div>
+
+        <section className="mb-10 grid gap-3 sm:grid-cols-5 text-sm">
+          <div className="rounded-2xl bg-surface-elevated border border-border/70 px-3 py-3 sm:px-4 sm:py-4 text-left">
+            <p className="text-[11px] uppercase tracking-[0.15em] text-pink-400/80 mb-1">
+              Step 1
+            </p>
+            <p className="font-semibold text-pink-50 mb-1">Connect</p>
+            <p className="text-xs text-pink-300/80">
+              Link your Aptos wallet to own and control your storage space.
+            </p>
+          </div>
+          <div className="rounded-2xl bg-surface-elevated border border-border/70 px-3 py-3 sm:px-4 sm:py-4 text-left">
+            <p className="text-[11px] uppercase tracking-[0.15em] text-pink-400/80 mb-1">
+              Step 2
+            </p>
+            <p className="font-semibold text-pink-50 mb-1">Upload</p>
+            <p className="text-xs text-pink-300/80">
+              Drop a local file or paste a source URL, then confirm on-chain.
+            </p>
+          </div>
+          <div className="rounded-2xl bg-surface-elevated border border-border/70 px-3 py-3 sm:px-4 sm:py-4 text-left">
+            <p className="text-[11px] uppercase tracking-[0.15em] text-pink-400/80 mb-1">
+              Step 3
+            </p>
+            <p className="font-semibold text-pink-50 mb-1">Catalog</p>
+            <p className="text-xs text-pink-300/80">
+              Every file appears in your on-chain catalog under “Your files”.
+            </p>
+          </div>
+          <div className="rounded-2xl bg-surface-elevated border border-border/70 px-3 py-3 sm:px-4 sm:py-4 text-left">
+            <p className="text-[11px] uppercase tracking-[0.15em] text-pink-400/80 mb-1">
+              Step 4
+            </p>
+            <p className="font-semibold text-pink-50 mb-1">AI process</p>
+            <p className="text-xs text-pink-300/80">
+              Optional AI descriptions and tags help you understand and search files.
+            </p>
+          </div>
+          <div className="rounded-2xl bg-surface-elevated border border-border/70 px-3 py-3 sm:px-4 sm:py-4 text-left">
+            <p className="text-[11px] uppercase tracking-[0.15em] text-pink-400/80 mb-1">
+              Step 5
+            </p>
+            <p className="font-semibold text-pink-50 mb-1">Download</p>
+            <p className="text-xs text-pink-300/80">
+              Share a short link so anyone can securely preview or download.
+            </p>
+          </div>
+        </section>
 
         <UploadBox onUploadComplete={onUploadComplete} />
 

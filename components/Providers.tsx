@@ -24,6 +24,22 @@ export function Providers({ children }: { children: React.ReactNode }) {
   const queryClient = useMemo(() => new QueryClient(), []);
   const shelbyClient = useMemo(makeShelbyClient, []);
 
+  if (typeof window !== "undefined") {
+    // Helpful debug log for API key + origin (not sent to backend)
+    // Only logs prefix and length so you can compare with Geomi dashboard.
+    // Example output: Shelby key prefix: AG-3PWB..., length: 36, origin: http://localhost:3001
+    // If this looks correct but you still get 401, the issue is on the Shelby/Geomi side.
+    // eslint-disable-next-line no-console
+    console.log(
+      "Shelby key prefix:",
+      shelbyApiKey ? `${shelbyApiKey.slice(0, 7)}...` : "(empty)",
+      "length:",
+      shelbyApiKey.length,
+      "origin:",
+      window.location.origin
+    );
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <AptosWalletAdapterProvider

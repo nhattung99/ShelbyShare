@@ -21,6 +21,12 @@ export function Header() {
             Home
           </Link>
           <Link
+            href="/marketplace"
+            className="text-sm text-pink-300/80 hover:text-pink-100 transition-colors"
+          >
+            Marketplace
+          </Link>
+          <Link
             href="/dashboard"
             className="text-sm text-pink-300/80 hover:text-pink-100 transition-colors"
           >

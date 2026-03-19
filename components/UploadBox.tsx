@@ -28,6 +28,9 @@ export function UploadBox({
 }: {
   onUploadComplete?: (shareId: string, name: string, ai?: AiDescribeResult) => void;
 }) {
+  const useLocalMirror =
+    typeof process.env.NEXT_PUBLIC_LOCAL_MIRROR !== "undefined" &&
+    process.env.NEXT_PUBLIC_LOCAL_MIRROR === "1";
   const { account, signAndSubmitTransaction } = useWallet();
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
@@ -68,7 +71,8 @@ export function UploadBox({
         const { hash } = await signAndSubmitTransaction({ data: payload });
         const aptos = new Aptos(
           new AptosConfig({
-            network: (process.env.NEXT_PUBLIC_APTOS_NETWORK as Network) ?? Network.TESTNET,
+            network: Network.CUSTOM,
+            fullnode: "https://api.shelbynet.shelby.xyz/v1",
             clientConfig: process.env.NEXT_PUBLIC_APTOS_API_KEY
               ? { API_KEY: process.env.NEXT_PUBLIC_APTOS_API_KEY }
               : undefined,
@@ -83,6 +87,23 @@ export function UploadBox({
         });
         setStatus("done");
         const shareId = encodeShareId(account.address.toString(), file.name);
+        // Optional: mirror to local filesystem for debugging
+        if (useLocalMirror) {
+          try {
+            const form = new FormData();
+            form.append("file", file);
+            form.append("shareId", shareId);
+            form.append("account", account.address.toString());
+            form.append("blobName", file.name);
+            await fetch("/api/local/mirror", {
+              method: "POST",
+              body: form,
+            });
+          } catch (mirrorErr) {
+            // eslint-disable-next-line no-console
+            console.warn("Local mirror failed:", mirrorErr);
+          }
+        }
         // Wait for AI if still in progress, then callback with result
         const ai = await aiPromise;
         setAiResult(ai ?? null);
@@ -93,7 +114,7 @@ export function UploadBox({
         setStatus("error");
       }
     },
-    [account?.address, signAndSubmitTransaction, onUploadComplete, useAi]
+    [account?.address, signAndSubmitTransaction, onUploadComplete, useAi, useLocalMirror]
   );
 
   const onDrop = useCallback(
@@ -119,6 +140,8 @@ export function UploadBox({
     },
     [upload]
   );
+
+  const busy = status === "encoding" || status === "registering" || status === "uploading";
 
   const uploadFromUrl = useCallback(async () => {
     const url = fromUrl.trim();
@@ -146,8 +169,6 @@ export function UploadBox({
       setUrlLoading(false);
     }
   }, [fromUrl, busy, upload]);
-
-  const busy = status === "encoding" || status === "registering" || status === "uploading";
 
   return (
     <div className="w-full max-w-xl mx-auto">

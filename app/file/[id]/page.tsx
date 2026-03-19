@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState, useCallback } from "react";
 import { Header } from "@/components/Header";
 import { ShareLink } from "@/components/ShareLink";
@@ -28,7 +28,11 @@ function getMimeFromName(name: string): string {
 export default function FilePage() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const id = typeof params.id === "string" ? params.id : "";
+  const useLocalMirror =
+    typeof process.env.NEXT_PUBLIC_LOCAL_MIRROR !== "undefined" &&
+    process.env.NEXT_PUBLIC_LOCAL_MIRROR === "1";
   const fileInfo = useMemo(() => getFileInfoFromShareId(id), [id]);
 
   const { data: metadata, isLoading, error } = useBlobMetadata({
@@ -41,17 +45,39 @@ export default function FilePage() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const handleDownload = useCallback(async () => {
-    if (!fileInfo) return;
+    const name = fileInfo?.name ?? searchParams.get("name") ?? "file";
     setDownloadError(null);
     setDownloading(true);
     try {
-      const data = await downloadFile(fileInfo.account, fileInfo.name);
-      const mime = getMimeFromName(fileInfo.name);
-      const blob = new Blob([new Uint8Array(data)], { type: mime });
+      if (fileInfo) {
+        try {
+          const data = await downloadFile(fileInfo.account, fileInfo.name);
+          const mime = getMimeFromName(fileInfo.name);
+          const blob = new Blob([new Uint8Array(data)], { type: mime });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = fileInfo.name;
+          a.click();
+          URL.revokeObjectURL(url);
+          return;
+        } catch (primaryErr) {
+          if (!useLocalMirror) throw primaryErr;
+        }
+      }
+      // Fallback to local mirror if enabled
+      const res = await fetch(
+        `/api/local/mirror/${encodeURIComponent(id)}?name=${encodeURIComponent(name)}`
+      );
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || `Download failed (${res.status})`);
+      }
+      const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = fileInfo.name;
+      a.download = name;
       a.click();
       URL.revokeObjectURL(url);
     } catch (e) {
@@ -59,7 +85,7 @@ export default function FilePage() {
     } finally {
       setDownloading(false);
     }
-  }, [fileInfo]);
+  }, [fileInfo, id, useLocalMirror, searchParams]);
 
   const handlePreview = useCallback(async () => {
     if (!fileInfo) return;
@@ -75,8 +101,13 @@ export default function FilePage() {
     }
   }, [fileInfo]);
 
+  const name =
+    fileInfo?.name ?? searchParams.get("name") ?? "Unknown file";
+
   const mime = fileInfo ? getMimeFromName(fileInfo.name) : "";
-  const canPreview = fileInfo && (PREVIEW_TYPES.includes(mime) || mime.startsWith("image/") || mime.startsWith("text/"));
+  const canPreview =
+    fileInfo &&
+    (PREVIEW_TYPES.includes(mime) || mime.startsWith("image/") || mime.startsWith("text/"));
 
   if (!id || !fileInfo) {
     return (
@@ -114,7 +145,7 @@ export default function FilePage() {
       <main className="flex-1 max-w-2xl w-full mx-auto px-4 py-12">
         <div className="rounded-2xl bg-surface-elevated border border-border p-6 shadow-sm">
           <h1 className="text-xl font-semibold text-pink-50 truncate mb-1">
-            {fileInfo.name}
+            {name}
           </h1>
           {(sizeStr || (metadata && "created_at" in metadata)) && (
             <p className="text-sm text-pink-300/80 mb-4">
