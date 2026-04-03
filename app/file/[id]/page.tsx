@@ -113,13 +113,13 @@ export default function FilePage() {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
-        <main className="flex-1 max-w-2xl mx-auto px-4 py-12 text-center">
-          <h1 className="text-xl font-semibold text-pink-50 mb-2">Invalid link</h1>
-          <p className="text-pink-300/80 mb-4">This share link is invalid or expired.</p>
+        <main className="mx-auto flex max-w-2xl flex-1 flex-col px-4 pb-12 pt-24 text-center">
+          <h1 className="mb-2 text-xl font-semibold text-on-surface">Invalid link</h1>
+          <p className="mb-4 text-on-surface/70">This share link is invalid or expired.</p>
           <button
             type="button"
             onClick={() => router.push("/")}
-            className="text-accent hover:underline"
+            className="text-secondary hover:underline"
           >
             Go home
           </button>
@@ -142,30 +142,32 @@ export default function FilePage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 max-w-2xl w-full mx-auto px-4 py-12">
-        <div className="rounded-2xl bg-surface-elevated border border-border p-6 shadow-sm">
-          <h1 className="text-xl font-semibold text-pink-50 truncate mb-1">
+      <main className="mx-auto w-full max-w-2xl flex-1 px-4 pb-12 pt-24">
+        <div className="rounded-2xl border border-border bg-surface-elevated p-6 shadow-sm">
+          <h1 className="mb-1 truncate text-xl font-semibold text-on-surface">
             {name}
           </h1>
           {(sizeStr || (metadata && "created_at" in metadata)) && (
-            <p className="text-sm text-pink-300/80 mb-4">
+            <p className="mb-4 text-sm text-on-surface/70">
               {sizeStr}
               {metadata && "created_at" in metadata && ` · ${new Date((metadata as { created_at: string }).created_at).toLocaleString()}`}
             </p>
           )}
           {isLoading && !metadata && (
-            <p className="text-sm text-pink-300/80 mb-4">Loading file info…</p>
+            <p className="mb-4 text-sm text-on-surface/70">Loading file info…</p>
           )}
           {error && (
-            <p className="text-sm text-pink-400 mb-4">Could not load metadata. You can still try to download.</p>
+            <p className="mb-4 text-sm text-on-surface/60">
+              Could not load metadata. You can still try to download.
+            </p>
           )}
 
-          <div className="flex flex-wrap gap-3 mb-4">
+          <div className="mb-4 flex flex-wrap gap-3">
             <button
               type="button"
               onClick={handleDownload}
               disabled={downloading}
-              className="px-4 py-2 rounded-lg bg-accent text-surface font-medium hover:bg-accent-muted disabled:opacity-60 transition-colors"
+              className="rounded-lg bg-secondary px-4 py-2 font-medium text-white transition-colors hover:bg-secondary/90 disabled:opacity-60"
             >
               {downloading ? "Downloading…" : "Download"}
             </button>
@@ -174,7 +176,7 @@ export default function FilePage() {
                 type="button"
                 onClick={handlePreview}
                 disabled={downloading}
-                className="px-4 py-2 rounded-lg bg-surface-muted border border-border text-pink-200 hover:bg-surface hover:border-accent/50 transition-colors disabled:opacity-60"
+                className="rounded-lg border border-border bg-surface-muted px-4 py-2 text-on-surface/85 transition-colors hover:border-secondary/50 hover:bg-surface disabled:opacity-60"
               >
                 Preview
               </button>
@@ -182,22 +184,22 @@ export default function FilePage() {
           </div>
 
           {downloadError && (
-            <p className="text-sm text-red-400 mb-4">{downloadError}</p>
+            <p className="mb-4 text-sm text-red-500">{downloadError}</p>
           )}
 
-          <div className="pt-4 border-t border-border">
-            <p className="text-sm text-pink-400/80 mb-2">Share link</p>
+          <div className="border-t border-border pt-4">
+            <p className="mb-2 text-sm text-on-surface/60">Share link</p>
             <ShareLink url={shareUrl} />
           </div>
         </div>
 
         {previewUrl && (
-          <div className="mt-8 rounded-2xl border border-border bg-surface-elevated overflow-hidden shadow-sm">
-            <div className="p-2 border-b border-border flex justify-end">
+          <div className="mt-8 overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-sm">
+            <div className="flex justify-end border-b border-border p-2">
               <button
                 type="button"
                 onClick={() => { URL.revokeObjectURL(previewUrl); setPreviewUrl(null); }}
-                className="text-sm text-pink-400 hover:text-pink-100"
+                className="text-sm text-on-surface/60 hover:text-on-surface"
               >
                 Close preview
               </button>

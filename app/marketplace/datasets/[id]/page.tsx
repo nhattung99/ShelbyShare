@@ -158,7 +158,7 @@ export default function DatasetDetailPage() {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
-        <main className="flex-1 flex items-center justify-center text-pink-400/80">
+        <main className="flex flex-1 items-center justify-center pt-24 text-on-surface/60">
           Loading dataset…
         </main>
       </div>
@@ -169,9 +169,9 @@ export default function DatasetDetailPage() {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
-        <main className="flex-1 max-w-xl mx-auto px-4 py-12 text-center">
-          <h1 className="text-xl font-semibold text-pink-50 mb-2">Dataset not found</h1>
-          <Link href="/marketplace" className="text-accent hover:underline">
+        <main className="mx-auto flex max-w-xl flex-1 flex-col px-4 pb-12 pt-24 text-center">
+          <h1 className="mb-2 text-xl font-semibold text-on-surface">Dataset not found</h1>
+          <Link href="/marketplace" className="text-secondary hover:underline">
             Back to Marketplace
           </Link>
         </main>
@@ -182,14 +182,14 @@ export default function DatasetDetailPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 max-w-2xl w-full mx-auto px-4 py-12">
-        <div className="rounded-2xl bg-surface-elevated border border-border p-6">
-          <h1 className="text-xl font-semibold text-pink-50 mb-2">{dataset.name}</h1>
-          <p className="text-sm text-pink-300/80 mb-4">
+      <main className="mx-auto w-full max-w-2xl flex-1 px-4 pb-12 pt-24">
+        <div className="rounded-2xl border border-border bg-surface-elevated p-6">
+          <h1 className="mb-2 text-xl font-semibold text-on-surface">{dataset.name}</h1>
+          <p className="mb-4 text-sm text-on-surface/70">
             {formatSize(dataset.sizeBytes)} · {dataset.downloads} downloads · {dataset.price === 0 ? "Free" : `${dataset.price} APT`}
           </p>
 
-          {error && <p className="text-sm text-red-400 mb-4">{error}</p>}
+          {error && <p className="mb-4 text-sm text-red-500">{error}</p>}
 
           <div className="flex flex-wrap gap-3">
             {hasAccess ? (
@@ -197,7 +197,7 @@ export default function DatasetDetailPage() {
                 type="button"
                 onClick={handleDownload}
                 disabled={downloading}
-                className="px-4 py-2 rounded-lg bg-accent text-surface font-medium hover:bg-accent-muted disabled:opacity-60"
+                className="rounded-lg bg-secondary px-4 py-2 font-medium text-white hover:bg-secondary/90 disabled:opacity-60"
               >
                 {downloading ? "Downloading…" : "Download"}
               </button>
@@ -206,7 +206,7 @@ export default function DatasetDetailPage() {
                 type="button"
                 onClick={handlePurchase}
                 disabled={purchasing}
-                className="px-4 py-2 rounded-lg bg-accent text-surface font-medium hover:bg-accent-muted disabled:opacity-60"
+                className="rounded-lg bg-secondary px-4 py-2 font-medium text-white hover:bg-secondary/90 disabled:opacity-60"
               >
                 {purchasing ? "Claiming…" : "Claim (free)"}
               </button>
@@ -215,14 +215,14 @@ export default function DatasetDetailPage() {
                 type="button"
                 onClick={handlePurchase}
                 disabled={purchasing}
-                className="px-4 py-2 rounded-lg bg-accent text-surface font-medium hover:bg-accent-muted disabled:opacity-60"
+                className="rounded-lg bg-secondary px-4 py-2 font-medium text-white hover:bg-secondary/90 disabled:opacity-60"
               >
                 {purchasing ? "Purchasing…" : `Purchase ${dataset.price} APT`}
               </button>
             )}
             <Link
               href="/marketplace"
-              className="px-4 py-2 rounded-lg border border-border text-pink-200 hover:bg-surface-muted"
+              className="rounded-lg border border-border px-4 py-2 text-on-surface/85 hover:bg-surface-muted"
             >
               Back to Marketplace
             </Link>

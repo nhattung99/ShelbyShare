@@ -30,20 +30,23 @@ export function FileCard({
   description,
   tags,
 }: FileCardProps) {
-  const url = typeof window !== "undefined" ? `${window.location.origin}/file/${shareId}` : `/file/${shareId}`;
+  const url =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/file/${shareId}`
+      : `/file/${shareId}`;
 
   return (
-    <div className="rounded-2xl bg-surface-elevated border border-border p-4 hover:border-accent/30 transition-colors shadow-sm">
+    <div className="rounded-2xl border border-border bg-surface-elevated p-4 shadow-sm transition-colors hover:border-secondary/30">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <Link
             href={`/file/${shareId}`}
-            className="font-medium text-pink-50 hover:text-accent truncate block"
+            className="block truncate font-medium text-on-surface hover:text-secondary"
           >
             {name}
           </Link>
           {(size != null || createdAt) && (
-            <div className="mt-1 flex items-center gap-3 text-xs text-pink-400/80">
+            <div className="mt-1 flex items-center gap-3 text-xs text-on-surface/60">
               {size != null && <span>{formatSize(size)}</span>}
               {createdAt && (
                 <span>{new Date(createdAt).toLocaleDateString()}</span>
@@ -51,10 +54,12 @@ export function FileCard({
             </div>
           )}
           {description && (
-            <p className="mt-2 text-sm text-pink-200/90 line-clamp-2">{description}</p>
+            <p className="mt-2 line-clamp-2 text-sm text-on-surface/80">
+              {description}
+            </p>
           )}
           {tags && (
-            <p className="mt-1 text-xs text-pink-400/70">Tags: {tags}</p>
+            <p className="mt-1 text-xs text-on-surface/55">Tags: {tags}</p>
           )}
         </div>
       </div>

@@ -93,22 +93,22 @@ export default function MarketplacePage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-12">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold text-pink-50 mb-3">Marketplace</h1>
-          <p className="text-pink-300/80 max-w-xl mx-auto">
+      <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col px-4 pb-12 pt-24 sm:px-6">
+        <div className="mb-10 text-center">
+          <h1 className="mb-3 text-4xl font-bold text-on-surface">Marketplace</h1>
+          <p className="mx-auto max-w-xl text-on-surface/70">
             Buy and sell AI training datasets. On-chain ownership, Shelby storage.
           </p>
-          <div className="flex gap-3 justify-center mt-6 flex-wrap">
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link
               href="/marketplace/upload"
-              className="px-4 py-2 rounded-lg bg-accent text-surface font-medium hover:bg-accent-muted"
+              className="rounded-lg bg-secondary px-4 py-2 font-medium text-white hover:bg-secondary/90"
             >
               List dataset
             </Link>
             <Link
               href="/"
-              className="px-4 py-2 rounded-lg border border-border text-pink-200 hover:bg-surface-muted"
+              className="rounded-lg border border-border bg-white/70 px-4 py-2 font-medium text-on-surface/90 hover:bg-surface-muted"
             >
               Share file (free)
             </Link>
@@ -121,15 +121,15 @@ export default function MarketplacePage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search by name or seller..."
-            className="w-full max-w-md mx-auto block px-3 py-2 rounded-lg bg-surface border border-border text-pink-100 placeholder-pink-500/50"
+            className="mx-auto block w-full max-w-md rounded-lg border border-border bg-surface px-3 py-2 text-on-surface placeholder-on-surface/40"
           />
         </div>
 
         {loading && (
-          <div className="text-pink-400/80 py-12 text-center">Loading datasets…</div>
+          <div className="py-12 text-center text-on-surface/60">Loading datasets…</div>
         )}
         {!loading && filtered.length === 0 && (
-          <div className="rounded-2xl border border-border bg-surface-elevated p-12 text-center text-pink-400/80">
+          <div className="rounded-2xl border border-border bg-surface-elevated p-12 text-center text-on-surface/60">
             No datasets yet. Be the first to list one.
           </div>
         )}

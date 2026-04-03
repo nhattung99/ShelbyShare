@@ -21,18 +21,18 @@ export function ShareLink({ url, onCopy, className = "" }: ShareLinkProps) {
 
   return (
     <div
-      className={`flex items-center rounded-xl bg-surface-muted border border-border overflow-hidden ${className}`}
+      className={`flex items-center overflow-hidden rounded-xl border border-border bg-surface-muted ${className}`}
     >
       <input
         type="text"
         readOnly
         value={url}
-        className="flex-1 min-w-0 px-3 py-2.5 bg-transparent text-sm text-pink-200 font-mono truncate outline-none"
+        className="min-w-0 flex-1 truncate bg-transparent px-3 py-2.5 font-mono text-sm text-on-surface/90 outline-none"
       />
       <button
         type="button"
         onClick={copy}
-        className="px-4 py-2.5 bg-surface-elevated border-l border-border text-accent hover:bg-accent-dim text-sm font-medium transition-colors shrink-0"
+        className="shrink-0 border-l border-border bg-surface-elevated px-4 py-2.5 text-sm font-medium text-secondary transition-colors hover:bg-accent-dim"
       >
         {copied ? "Copied!" : "Copy"}
       </button>

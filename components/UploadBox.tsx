@@ -173,7 +173,7 @@ export function UploadBox({
   return (
     <div className="w-full max-w-xl mx-auto">
       {!account ? (
-        <div className="rounded-2xl border border-border border-dashed bg-surface-muted/50 p-10 text-center text-pink-400/80">
+        <div className="rounded-2xl border border-border border-dashed bg-surface-muted/50 p-10 text-center text-on-surface/60">
           Connect your wallet to upload files.
         </div>
       ) : (
@@ -185,9 +185,9 @@ export function UploadBox({
               checked={useAi}
               onChange={(e) => setUseAi(e.target.checked)}
               disabled={busy}
-              className="rounded border-border bg-surface text-accent focus:ring-accent"
+              className="rounded border-border bg-surface text-secondary focus:ring-secondary"
             />
-            <label htmlFor="use-ai" className="text-sm text-pink-300/90 cursor-pointer">
+            <label htmlFor="use-ai" className="cursor-pointer text-sm text-on-surface/80">
               Use AI to describe file
             </label>
           </div>
@@ -197,8 +197,8 @@ export function UploadBox({
             onDragLeave={onDragLeave}
             className={`rounded-2xl border-2 border-dashed p-10 text-center transition-all duration-200 ${
               drag
-                ? "border-accent bg-accent-dim scale-[1.01]"
-                : "border-border bg-surface-muted/50 hover:border-pink-500/50"
+                ? "border-secondary bg-accent-dim scale-[1.01]"
+                : "border-border bg-surface-muted/50 hover:border-secondary/50"
             } ${busy ? "pointer-events-none opacity-80" : ""}`}
           >
             <input
@@ -210,27 +210,27 @@ export function UploadBox({
             />
             <label htmlFor="file-upload" className="cursor-pointer block">
               {status === "encoding" && (
-                <p className="text-accent">
+                <p className="text-secondary">
                   Encoding file… {useAi && "(AI analyzing in background)"}
                 </p>
               )}
               {status === "registering" && (
-                <p className="text-accent">Confirm in wallet…</p>
+                <p className="text-secondary">Confirm in wallet…</p>
               )}
               {status === "uploading" && (
-                <p className="text-accent">Uploading to Shelby…</p>
+                <p className="text-secondary">Uploading to Shelby…</p>
               )}
               {status === "done" && (
                 <div>
-                  <p className="text-accent">Upload complete.</p>
+                  <p className="text-secondary">Upload complete.</p>
                   {aiLoading && (
-                    <p className="text-sm text-pink-400/80 mt-1">AI describing…</p>
+                    <p className="mt-1 text-sm text-on-surface/60">AI describing…</p>
                   )}
                   {aiResult && !aiLoading && (
-                    <div className="mt-3 text-left max-w-md mx-auto rounded-lg bg-surface-elevated/80 border border-border p-3">
-                      <p className="text-sm text-pink-200">{aiResult.description}</p>
+                    <div className="mx-auto mt-3 max-w-md rounded-lg border border-border bg-surface-elevated/80 p-3 text-left">
+                      <p className="text-sm text-on-surface/90">{aiResult.description}</p>
                       {aiResult.tags && (
-                        <p className="text-xs text-pink-400/80 mt-1">
+                        <p className="mt-1 text-xs text-on-surface/60">
                           Tags: {aiResult.tags}
                         </p>
                       )}
@@ -242,15 +242,18 @@ export function UploadBox({
                 <p className="text-red-400">{error}</p>
               )}
               {(status === "idle" || status === "done") && (
-                <p className="text-pink-300/90">
-                  Drop a file here or <span className="text-accent underline">browse</span>
+                <p className="text-on-surface/80">
+                  Drop a file here or{" "}
+                  <span className="underline text-secondary">browse</span>
                 </p>
               )}
             </label>
           </div>
 
           <div className="mt-4 rounded-xl border border-border bg-surface-muted/30 p-4">
-            <p className="text-sm text-pink-400/90 mb-2">Upload trực tiếp từ nguồn (URL)</p>
+            <p className="mb-2 text-sm text-on-surface/70">
+              Upload trực tiếp từ nguồn (URL)
+            </p>
             <div className="flex gap-2 flex-wrap">
               <input
                 type="url"
@@ -259,13 +262,13 @@ export function UploadBox({
                 onKeyDown={(e) => e.key === "Enter" && uploadFromUrl()}
                 placeholder="https://example.com/file.pdf"
                 disabled={busy || urlLoading}
-                className="flex-1 min-w-[200px] px-3 py-2 rounded-lg bg-surface border border-border text-pink-100 placeholder-pink-500/50 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent disabled:opacity-60"
+                className="min-w-[200px] flex-1 rounded-lg border border-border bg-surface px-3 py-2 text-on-surface placeholder-on-surface/40 focus:border-secondary focus:outline-none focus:ring-2 focus:ring-secondary/40 disabled:opacity-60"
               />
               <button
                 type="button"
                 onClick={uploadFromUrl}
                 disabled={busy || urlLoading || !fromUrl.trim()}
-                className="px-4 py-2 rounded-lg bg-accent text-surface font-medium hover:bg-accent-muted disabled:opacity-50 transition-colors"
+                className="rounded-lg bg-secondary px-4 py-2 font-medium text-white transition-colors hover:bg-secondary/90 disabled:opacity-50"
               >
                 {urlLoading ? "Đang tải…" : "Tải & upload"}
               </button>

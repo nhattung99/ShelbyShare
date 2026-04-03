@@ -9,23 +9,40 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        surface: {
-          DEFAULT: "#0f0a0d",
-          elevated: "#1a1216",
-          muted: "#1f151a",
+        primary: {
+          DEFAULT: "#FFB7C5",
+          container: "#FFE4E1",
         },
+        secondary: "#FF8E9E",
+        tertiary: "#FFF5F0",
+        "on-primary": "#8B2E3F",
+        "on-surface": "#4A3236",
+        surface: {
+          DEFAULT: "#FFF9F9",
+          elevated: "#FFFFFF",
+          muted: "#FCE4E6",
+        },
+        "surface-container": "#FDF0F1",
+        "surface-container-high": "#FCE4E6",
+        outline: "#E6B8B8",
         accent: {
-          DEFAULT: "#ec4899",
-          muted: "#db2777",
-          dim: "rgba(236, 72, 153, 0.14)",
+          DEFAULT: "#FF8E9E",
+          muted: "#ff7d90",
+          dim: "rgba(255, 142, 158, 0.18)",
         },
         border: {
-          DEFAULT: "#2e2428",
-          focus: "#ec4899",
+          DEFAULT: "rgba(230, 184, 184, 0.45)",
+          focus: "#FF8E9E",
         },
       },
       fontFamily: {
-        sans: ["system-ui", "Segoe UI", "Roboto", "sans-serif"],
+        sans: [
+          "var(--font-plus-jakarta)",
+          "system-ui",
+          "Segoe UI",
+          "Roboto",
+          "sans-serif",
+        ],
         mono: ["ui-monospace", "monospace"],
       },
     },

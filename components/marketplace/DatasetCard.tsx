@@ -18,20 +18,24 @@ export function DatasetCard({ dataset }: { dataset: Dataset }) {
   return (
     <Link
       href={`/marketplace/datasets/${dataset.datasetAddr}`}
-      className="block rounded-2xl bg-surface-elevated border border-border p-4 hover:border-accent/40 transition-colors text-left no-underline"
+      className="block rounded-2xl border border-border bg-surface-elevated p-4 text-left no-underline transition-colors hover:border-secondary/40"
     >
-      <div className="flex justify-between items-start gap-2 mb-2">
-        <span className="text-xs text-pink-400/70 font-mono">#{dataset.id}</span>
-        <span className="text-xs text-pink-400/70">{dataset.downloads} downloads</span>
+      <div className="mb-2 flex items-start justify-between gap-2">
+        <span className="font-mono text-xs text-on-surface/55">#{dataset.id}</span>
+        <span className="text-xs text-on-surface/55">{dataset.downloads} downloads</span>
       </div>
-      <h3 className="font-semibold text-pink-50 truncate mb-1">{dataset.name}</h3>
-      <p className="text-sm text-pink-300/80 line-clamp-2 mb-3">{dataset.description || "No description."}</p>
-      <div className="flex justify-between items-center pt-2 border-t border-border">
-        <span className="text-xs text-pink-400/70">{dataset.size}</span>
+      <h3 className="mb-1 truncate font-semibold text-on-surface">{dataset.name}</h3>
+      <p className="mb-3 line-clamp-2 text-sm text-on-surface/70">
+        {dataset.description || "No description."}
+      </p>
+      <div className="flex items-center justify-between border-t border-border pt-2">
+        <span className="text-xs text-on-surface/55">{dataset.size}</span>
         {dataset.price === 0 ? (
-          <span className="text-xs font-medium text-green-400/90 bg-green-500/10 px-2 py-0.5 rounded">Free</span>
+          <span className="rounded bg-green-500/15 px-2 py-0.5 text-xs font-medium text-green-700">
+            Free
+          </span>
         ) : (
-          <span className="text-sm font-semibold text-accent">{dataset.price} APT</span>
+          <span className="text-sm font-semibold text-secondary">{dataset.price} APT</span>
         )}
       </div>
     </Link>

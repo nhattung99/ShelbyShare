@@ -21,13 +21,14 @@ export function WalletConnect() {
   if (connected && account) {
     return (
       <div className="flex items-center gap-2">
-        <span className="text-sm text-pink-300/90 font-mono truncate max-w-[140px]">
-          {account.address.toString().slice(0, 6)}…{account.address.toString().slice(-4)}
+        <span className="max-w-[140px] truncate font-mono text-sm text-on-surface/80">
+          {account.address.toString().slice(0, 6)}…
+          {account.address.toString().slice(-4)}
         </span>
         <button
           type="button"
           onClick={() => disconnect()}
-          className="px-3 py-1.5 rounded-lg bg-surface-muted border border-border text-pink-200 hover:bg-surface-elevated hover:border-accent/50 text-sm transition-colors"
+          className="rounded-lg border border-border bg-surface-muted px-3 py-1.5 text-sm text-on-surface/90 transition-colors hover:border-secondary/50 hover:bg-surface-elevated"
         >
           Disconnect
         </button>
@@ -40,7 +41,7 @@ export function WalletConnect() {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="px-4 py-2 rounded-lg bg-accent text-surface font-medium hover:bg-accent-muted transition-colors"
+        className="rounded-lg bg-secondary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-secondary/90"
       >
         Connect wallet
       </button>
@@ -51,9 +52,9 @@ export function WalletConnect() {
             aria-hidden
             onClick={() => setOpen(false)}
           />
-          <div className="absolute right-0 top-full mt-2 z-20 w-56 rounded-xl bg-surface-elevated border border-border shadow-xl py-2">
+          <div className="absolute right-0 top-full z-20 mt-2 w-56 rounded-xl border border-border bg-surface-elevated py-2 shadow-xl">
             {wallets.length === 0 ? (
-              <p className="px-4 py-2 text-sm text-pink-400/80">
+              <p className="px-4 py-2 text-sm text-on-surface/60">
                 No wallets found. Install Petra or another Aptos wallet.
               </p>
             ) : (
@@ -62,7 +63,7 @@ export function WalletConnect() {
                   key={wallet.name}
                   type="button"
                   onClick={() => handleConnect(wallet.name)}
-                  className="w-full px-4 py-2.5 text-left text-sm text-pink-100 hover:bg-surface-muted transition-colors flex items-center gap-2"
+                  className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-on-surface transition-colors hover:bg-surface-muted"
                 >
                   {wallet.name}
                 </button>

@@ -15,45 +15,58 @@ export default function DashboardPage() {
   });
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <Header />
-      <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-12">
-        <h1 className="text-3xl font-bold text-pink-50 mb-2 tracking-tight">Dashboard</h1>
-        <p className="text-pink-300/80 mb-10">
-          Files uploaded by your wallet.
-        </p>
+      <main className="mx-auto w-full max-w-4xl flex-1 px-4 pb-12 pt-24 sm:px-6">
+        <h1 className="mb-2 text-3xl font-bold tracking-tight text-on-surface">
+          Dashboard
+        </h1>
+        <p className="mb-10 text-on-surface/70">Files uploaded by your wallet.</p>
 
         {!account && (
-          <div className="rounded-2xl border border-border bg-surface-elevated p-10 text-center text-pink-400/80">
+          <div className="rounded-2xl border border-border bg-surface-elevated p-10 text-center text-on-surface/60">
             Connect your wallet to see your files.
           </div>
         )}
 
         {account && isLoading && (
-          <div className="text-pink-400/80 py-12 text-center">
+          <div className="py-12 text-center text-on-surface/60">
             Loading your files…
           </div>
         )}
 
         {account && error && (
-          <div className="rounded-xl border border-pink-500/30 bg-pink-500/10 p-4 text-pink-200">
+          <div className="rounded-xl border border-secondary/30 bg-secondary/10 p-4 text-on-surface/90">
             <p className="font-medium">Failed to load files</p>
-            <p className="text-sm mt-1 text-pink-300/90">{error.message}</p>
+            <p className="mt-1 text-sm text-on-surface/75">{error.message}</p>
             {/Unauthorized|API key not found/i.test(error.message) && (
-              <p className="text-sm mt-3 text-pink-400/80">
-                Trạng thái key: {process.env.NEXT_PUBLIC_SHELBY_API_KEY ? "✅ Đã có" : "❌ Chưa nhận"}. Geomi → client key → <strong>Approved URLs</strong> phải có: <code className="bg-surface-elevated px-1 rounded text-pink-200">{typeof window !== "undefined" ? window.location.origin : "http://localhost:3001"}</code>, <code className="bg-surface-elevated px-1 rounded text-pink-200">http://localhost:3000</code>, <code className="bg-surface-elevated px-1 rounded text-pink-200">http://localhost:3001</code>.
+              <p className="mt-3 text-sm text-on-surface/60">
+                Trạng thái key:{" "}
+                {process.env.NEXT_PUBLIC_SHELBY_API_KEY ? "✅ Đã có" : "❌ Chưa nhận"}. Geomi
+                → client key → <strong>Approved URLs</strong> phải có:{" "}
+                <code className="rounded bg-surface-muted px-1 text-on-surface/90">
+                  {typeof window !== "undefined"
+                    ? window.location.origin
+                    : "http://localhost:3001"}
+                </code>
+                ,{" "}
+                <code className="rounded bg-surface-muted px-1 text-on-surface/90">
+                  http://localhost:3000
+                </code>
+                ,{" "}
+                <code className="rounded bg-surface-muted px-1 text-on-surface/90">
+                  http://localhost:3001
+                </code>
+                .
               </p>
             )}
           </div>
         )}
 
         {account && blobs && blobs.length === 0 && !isLoading && (
-          <div className="rounded-2xl border border-border bg-surface-elevated p-12 text-center text-pink-400/80">
+          <div className="rounded-2xl border border-border bg-surface-elevated p-12 text-center text-on-surface/60">
             <p className="mb-4">No files yet.</p>
-            <Link
-              href="/"
-              className="text-accent hover:underline font-medium"
-            >
+            <Link href="/" className="font-medium text-secondary hover:underline">
               Upload your first file →
             </Link>
           </div>
